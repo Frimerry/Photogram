@@ -17,7 +17,7 @@
         <main class="loginMain">
            <!--회원가입섹션-->
             <section class="login">
-                <article class="login__form__container">
+                <article class="login__form__container">	
                   
                    <!--회원가입 폼-->
                     <div class="login__form">
