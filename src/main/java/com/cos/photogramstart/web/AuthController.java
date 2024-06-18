@@ -5,8 +5,6 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -24,8 +22,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 public class AuthController {
 	
-	
-	private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+	// private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 	
 	private final AuthService authService;
 	
@@ -33,17 +30,19 @@ public class AuthController {
 	//	this.authService = authService;
 	//}
 
-	
+	/* 로그인 페이지 */
 	@GetMapping("/auth/signin")
 	public String signinForm() {
 		return "auth/signin";
 	}
 	
+	/* 회원가입 페이지 */
 	@GetMapping("/auth/signup")
 	public String signupForm() {
 		return "auth/signup";
 	}
 	
+	/* 회원가입 */
 	@PostMapping("/auth/signup")
 	public String signup(@Valid SignupDto signupDto, BindingResult bindingResult) {
 		

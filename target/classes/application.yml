@@ -29,12 +29,12 @@ spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 2MB
+      max-file-size: 10MB
 
   security:
     user:
       name: test
       password: 1234   
 
-#file:
-#  path: C:/workspace/springbootwork/upload/
+file:
+  path: C:\Programz\sts-workspace\springboot\upload\

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cos.photogramstart.config.auth.PrincipalDetails;
+import com.cos.photogramstart.constant.constant;
 import com.cos.photogramstart.domain.user.User;
 import com.cos.photogramstart.handler.ex.CustomValidationApiException;
 import com.cos.photogramstart.service.UserService;
@@ -46,7 +47,7 @@ public class UserApiController {
 			User userEntity = userService.userUpdate(id, userUpdateDto.toEntity());
 			principalDetails.setUser(userEntity);
 			
-			return new CMRespDto<>(1, "회원정보 수정완료", userEntity);
+			return new CMRespDto<>(constant.POSITIVE, "회원정보 수정완료", userEntity);
 		}
 	}
 
