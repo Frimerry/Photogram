@@ -3,6 +3,7 @@ package com.cos.photogramstart.service;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,12 @@ import lombok.RequiredArgsConstructor;
 public class ImageService {
 	
 	private final ImageRepository imageRepository;
+	
+	/* 메인 스토리 목록 */
+	@Transactional(readOnly=true)
+	public List<Image> imageStory(int principalId){
+		return imageRepository.mStory(principalId);
+	}
 	
 	@Value("${file.path}")	// application.yml
 	private String uploadFolder;

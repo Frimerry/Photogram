@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 
 import com.cos.photogramstart.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +36,8 @@ public class Image {
 	/** 이미지 저장경로 */
 	private String postImageUrl;
 	
-	/** 이미지 업로더*/
+	/** 이미지 게시자 정보 */
+	@JsonIgnoreProperties({"images"})
 	@JoinColumn(name="userId")
 	@ManyToOne
 	private User user;
