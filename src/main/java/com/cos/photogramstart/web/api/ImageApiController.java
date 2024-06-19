@@ -1,7 +1,9 @@
 package com.cos.photogramstart.web.api;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,9 +24,12 @@ public class ImageApiController {
 	
 	private final ImageService imageService;
 	
+	/* 메인 페이지 목록 */
 	@GetMapping("/api/image")
-	public ResponseEntity<?> imageStory(@AuthenticationPrincipal PrincipalDetails principalDetails){
-		List<Image> images = imageService.imageStory(principalDetails.getUser().getId());
+	public ResponseEntity<?> imageStory(@AuthenticationPrincipal PrincipalDetails principalDetails,
+			@PageableDefault(size=3) Pageable pageable){// 페이징 : 3건씩
+		
+		Page<Image> images = imageService.imageStory(principalDetails.getUser().getId(), pageable);
 		return new ResponseEntity<>(new CMRespDto<>(constant.POSITIVE, "Success", images), HttpStatus.OK);
 	}
 

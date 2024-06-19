@@ -3,10 +3,11 @@ package com.cos.photogramstart.service;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +26,8 @@ public class ImageService {
 	
 	/* 메인 스토리 목록 */
 	@Transactional(readOnly=true)
-	public List<Image> imageStory(int principalId){
-		return imageRepository.mStory(principalId);
+	public Page<Image> imageStory(int principalId, Pageable pageable){
+		return imageRepository.mStory(principalId, pageable);
 	}
 	
 	@Value("${file.path}")	// application.yml
