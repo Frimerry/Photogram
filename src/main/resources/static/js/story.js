@@ -17,10 +17,20 @@ function storyLoad() {
 		dataType:"json"
 		
 	}).done(res=>{
-		res.data.content.forEach((image)=>{
-			let storyItem = getStoryItem(image);
-			$("#storyList").append(storyItem);
-		});
+		
+		// TODO : 구독목록이 없는 경우의 추가적인 처리 필요
+		console.log(res.data.totalElements)
+		
+		if(res.data.totalElements!= 0){
+			res.data.content.forEach((image)=>{
+				let storyItem = getStoryItem(image);
+				$("#storyList").append(storyItem);
+			});
+		}
+		else {
+			alert("TEST:표시할 구독목록이 없습니다.");
+		}
+		
 	}).fail(error=>{
 		console.log(error);
 	});
@@ -149,7 +159,7 @@ function toggleLike(imageId) {
 			likeIcon.addClass("far");
 			
 		}).fail(error=>{
-			console.log("Like Error", error);
+			console.log("Unlike Error", error);
 			alert("일시적인 오류로 좋아요 취소 실패. 네트워크 상태를 확인해주세요.");
 		});
 		
