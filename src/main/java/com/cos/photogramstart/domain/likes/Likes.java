@@ -1,7 +1,6 @@
-package com.cos.photogramstart.domain.image;
+package com.cos.photogramstart.domain.likes;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,13 +8,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
-import javax.persistence.Transient;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
-import com.cos.photogramstart.domain.likes.Likes;
+import com.cos.photogramstart.domain.image.Image;
 import com.cos.photogramstart.domain.user.User;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,37 +25,26 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 @Entity	// DB에 테이블 생성
-public class Image {
+@Table(uniqueConstraints = {
+		@UniqueConstraint(name="likes_uk", columnNames = { "imageId", "userId" })
+		}) // 좋아요를 이미 한 이미지에 중복 좋아요 불가
+public class Likes {
 	
 	/** PK */
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)	// 번호증가전략은 DB를 따라감	
 	private int id;
 	
-	/** 이미지 설명 */
-	private String caption;
+	/** 사진정보 */
+	@JoinColumn(name="imageId")
+	@ManyToOne
+	private Image image;
 	
-	/** 이미지 저장경로 */
-	private String postImageUrl;
-	
-	/** 이미지 게시자 정보 */
-	@JsonIgnoreProperties({"images"})
+	/** 사용자 정보 */
+	// @
 	@JoinColumn(name="userId")
 	@ManyToOne
 	private User user;
-	
-	/** 좋아요 */
-	@JsonIgnoreProperties({"image"})
-	@OneToMany(mappedBy="image")
-	private List<Likes> likes;
-	
-	@Transient	// DB컬럼생성X
-	private boolean likeState;
-	
-	@Transient
-	private int likeCount;
-	
-	/** 댓글 */
 	
 	/** 생성일시 */
 	private LocalDateTime createDate;

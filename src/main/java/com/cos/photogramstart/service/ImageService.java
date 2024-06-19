@@ -27,7 +27,23 @@ public class ImageService {
 	/* 메인 스토리 목록 */
 	@Transactional(readOnly=true)
 	public Page<Image> imageStory(int principalId, Pageable pageable){
-		return imageRepository.mStory(principalId, pageable);
+		
+		Page<Image> images= imageRepository.mStory(principalId, pageable);
+		
+		// 이미지 좋아요 정보
+		images.forEach((image)->{
+			// 좋아요 갯수
+			image.setLikeCount(image.getLikes().size());
+			
+			// 좋아요 상태
+			image.getLikes().forEach((like)->{
+				if(like.getUser().getId() == principalId) {
+					image.setLikeState(true);
+				}
+			});
+		});
+		
+		return images;
 	}
 	
 	@Value("${file.path}")	// application.yml
