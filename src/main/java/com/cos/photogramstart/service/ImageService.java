@@ -51,6 +51,7 @@ public class ImageService {
 		return images;
 	}
 	
+	/* 사진 업로드 경로 */
 	@Value("${file.path}")	// application.yml
 	private String uploadFolder;
 	
@@ -70,8 +71,7 @@ public class ImageService {
 		}
 		
 		Image image = imageUploadDto.toEntity(imageFileName, principalDetails.getUser());
-		Image imageEntity = imageRepository.save(image);
-		
+		imageRepository.save(image);
 	}
 
 }

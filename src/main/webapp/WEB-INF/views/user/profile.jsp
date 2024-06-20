@@ -17,7 +17,7 @@
 						id="userProfileImageInput" />
 				</form>
 
-				<img class="profile-image" src="#"
+				<img class="profile-image" src="/upload/${dto.user.profileImageUrl}"
 					onerror="this.src='/images/person.jpeg'" id="userProfileImage" />
 			</div>
 		</div>
@@ -31,6 +31,9 @@
 				<c:choose>
 					<c:when test="${dto.pageOwnerState}">
 						<button class="cta" onclick="location.href='/image/upload'">사진등록</button>
+						<button class="modi" onclick="popup('.modal-info')">
+							<i class="fas fa-cog"></i>
+						</button>
 					</c:when>
 					<c:otherwise>
 						<c:choose>
@@ -43,10 +46,6 @@
 						</c:choose>
 					</c:otherwise>
 				</c:choose>
-				
-				<button class="modi" onclick="popup('.modal-info')">
-					<i class="fas fa-cog"></i>
-				</button>
 			</div>
 
 			<div class="subscribe">
@@ -83,7 +82,7 @@
 						<a href="/upload/${image.postImageUrl}"> <img src="/upload/${image.postImageUrl}" /></a>
 						<div class="comment">
 							<a href="#" class=""> 
-								<i class="fas fa-heart"></i><span>0</span>
+								<i class="fas fa-heart"></i><span>${image.likeCount}</span>
 							</a>
 						</div>
 					</div>
@@ -109,7 +108,7 @@
 <div class="modal-image" onclick="modalImage()">
 	<div class="modal">
 		<p>프로필 사진 바꾸기</p>
-		<button onclick="profileImageUpload()">사진 업로드</button>
+		<button onclick="profileImageUpload(${principal.user.id})">사진 업로드</button>
 		<button onclick="closePopup('.modal-image')">취소</button>
 	</div>
 </div>

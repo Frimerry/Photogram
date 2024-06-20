@@ -89,29 +89,53 @@ function getSubscribeModalItem(u) {
 }
 
 // (3) 유저 프로파일 사진 변경 (완)
-function profileImageUpload() {
+function profileImageUpload(principalId) {
+	
 	$("#userProfileImageInput").click();
 
-	$("#userProfileImageInput").on("change", (e) => {
+	$("#userProfileImageInput").off("change").on("change", (e) => {
 		let f = e.target.files[0];
 
 		if (!f.type.match("image.*")) {
 			alert("이미지를 등록해야 합니다.");
 			return;
 		}
-
-		// 사진 전송 성공시 이미지 변경
-		let reader = new FileReader();
-		reader.onload = (e) => {
-			$("#userProfileImage").attr("src", e.target.result);
-		}
-		reader.readAsDataURL(f); // 이 코드 실행시 reader.onload 실행됨.
+		
+		let profileImageForm = $("#userProfileImageForm")[0];
+		
+		// formData 객체를 이용해 form태그의 필드와 그 값을 나타내는 일련의 key/value 쌍을 담을 수 있다.
+		let formData = new FormData(profileImageForm);
+		
+		$.ajax({
+			type:"put",
+			url:`/api/user/${principalId}/profileImageUrl`,
+			data:formData,
+			contentType:false,	// 필수:x-www-form-urlencoded 로파싱되는 것을 방지
+			processData:false,	// 필수:contentType을 false설정하면 QueryString 자동설정됨
+			enctype:"multipart/form-data",
+			dataType:"json"
+			
+		}).done(res=>{
+			// 사진 전송 성공시 이미지 변경
+			let reader = new FileReader();
+			reader.onload = (e) => {
+				$("#userProfileImage").attr("src", e.target.result);
+			}
+			reader.readAsDataURL(f); // 이 코드 실행시 reader.onload 실행됨.
+			
+			alert("프로필 사진이 변경되었습니다.");
+			
+		}).fail(error=>{
+			alert("일시적인 오류로 프로필 사진이 변경에 실패하였습니다. 네트워크 상태를 확인하고 다시 시도해주세요.");
+			console.log("Profile Image Change Failed!!!", error);
+		});
 	});
 }
 
 
 // (4) 사용자 정보 메뉴 열기 닫기
 function popup(obj) {
+	// TODO : 프로필사진 본인만 팝업 뜨도록 변경 필요
 	$(obj).css("display", "flex");
 }
 
