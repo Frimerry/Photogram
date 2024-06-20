@@ -14,6 +14,7 @@ import javax.persistence.PrePersist;
 
 import com.cos.photogramstart.domain.image.Image;
 import com.cos.photogramstart.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,6 +40,7 @@ public class Comment {
 	/** 사용자 정보 */
 	@JoinColumn(name="userId")
 	@ManyToOne(fetch=FetchType.EAGER)	// 한 댓글에 작성한 유저 정보는 1개만 불러와도 돼서 EAGER
+	@JsonIgnoreProperties({"images", "password"})
 	private User user;
 	
 	/** 이미지 정보 */

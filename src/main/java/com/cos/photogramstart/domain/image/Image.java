@@ -10,9 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.Transient;
 
+import com.cos.photogramstart.domain.comment.Comment;
 import com.cos.photogramstart.domain.likes.Likes;
 import com.cos.photogramstart.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -41,7 +43,7 @@ public class Image {
 	private String postImageUrl;
 	
 	/** 이미지 게시자 정보 */
-	@JsonIgnoreProperties({"images"})
+	@JsonIgnoreProperties({"images", "password"})
 	@JoinColumn(name="userId")
 	@ManyToOne
 	private User user;
@@ -58,6 +60,10 @@ public class Image {
 	private int likeCount;
 	
 	/** 댓글 */
+	@OrderBy("id DESC")	// 최신순
+	@JsonIgnoreProperties({"image"})
+	@OneToMany(mappedBy="image")	// 관계에서 외래키
+	List<Comment> comments;
 	
 	/** 생성일시 */
 	private LocalDateTime createDate;

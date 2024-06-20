@@ -42,7 +42,7 @@ public class Likes {
 	private Image image;
 	
 	/** 사용자 정보 */
-	@JsonIgnoreProperties({"images"})
+	@JsonIgnoreProperties({"images", "password"})
 	@JoinColumn(name="userId")
 	@ManyToOne
 	private User user;

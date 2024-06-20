@@ -19,7 +19,7 @@ function storyLoad() {
 	}).done(res=>{
 		
 		// TODO : 구독목록이 없는 경우의 추가적인 처리 필요
-		console.log(res.data.totalElements)
+		console.log("TODO: 수정예정", res.data.totalElements)
 		
 		if(res.data.totalElements!= 0){
 			res.data.content.forEach((image)=>{
@@ -77,22 +77,26 @@ function getStoryItem(image) {
 				<p>${image.caption}</p>
 			</div>
 	
-			<div id="storyCommentList-1">
+			<div id="storyCommentList-${image.id}">`;
+			
+			image.comments.forEach((comment)=>{
+				item += `<div class="sl__item__contents__comment" id="storyCommentItem-${comment.id}">
+						<p>
+							<b>${comment.user.username} :</b> ${comment.content}.
+						</p>
+		
+						<button>
+							<i class="fas fa-times"></i>
+						</button>
+					</div>`;
+			});
 	
-				<div class="sl__item__contents__comment" id="storyCommentItem-1"">
-					<p>
-						<b>Lovely :</b> 부럽습니다.
-					</p>
-	
-					<button>
-						<i class="fas fa-times"></i>
-					</button>
-				</div>
+			item += `
 			</div>
 	
 			<div class="sl__item__input">
-				<input type="text" placeholder="댓글 달기..." id="storyCommentInput-1" />
-				<button type="button" onClick="addComment()">게시</button>
+				<input type="text" placeholder="댓글을 작성해주세요." id="storyCommentInput-${image.id}" />
+				<button type="button" onClick="writeComment(${image.id})">게시</button>
 			</div>
 	
 		</div>
@@ -168,12 +172,13 @@ function toggleLike(imageId) {
 }
 
 // (4) 댓글쓰기
-function addComment() {
+function writeComment(imageId) {
 
-	let commentInput = $("#storyCommentInput-1");
-	let commentList = $("#storyCommentList-1");
+	let commentInput = $(`#storyCommentInput-${imageId}`);
+	let commentList = $(`#storyCommentList-${imageId}`);
 
 	let data = {
+		imageId: imageId,
 		content: commentInput.val()
 	}
 
@@ -181,17 +186,36 @@ function addComment() {
 		alert("댓글을 작성해주세요!");
 		return;
 	}
+	
+	$.ajax({
+		type:"post",
+		url:"/api/comment",
+		data: JSON.stringify(data),
+		contentType:"application/json; charset-utf-8",
+		dataType:"json"
+		
+	}).done(res=>{
+		console.log("댓글작성 성공", res)
+		
+		let comment = res.data;
+		
+		let content = `
+		  <div class="sl__item__contents__comment" id="storyCommentItem-${comment.id}"> 
+		    <p>
+		      <b>${comment.user.username} :</b>
+		      ${comment.content}
+		    </p>
+		    <button><i class="fas fa-times"></i></button>
+		  </div>
+		`;
+		commentList.prepend(content);
+		
+	}).fail(error=>{
+		alert("일시적인 오류로 댓글 작성에 실패했습니다. 네트워크 환경 확인 후 다시 시도해주세요.");
+		console.log(error)
+	});
 
-	let content = `
-			  <div class="sl__item__contents__comment" id="storyCommentItem-2""> 
-			    <p>
-			      <b>GilDong :</b>
-			      댓글 샘플입니다.
-			    </p>
-			    <button><i class="fas fa-times"></i></button>
-			  </div>
-	`;
-	commentList.prepend(content);
+	
 	commentInput.val("");
 }
 
