@@ -40,11 +40,8 @@
                         <!-- 또는end -->
                         
                         <!-- Oauth 소셜로그인 -->
-                        <div class="login__facebook">
-                            <button>
-                                <i class="fab fa-facebook-square"></i>
-                                <span>Facebook으로 로그인</span>
-                            </button>
+                        <div class="login__google">
+                            <img src="/images/google_light_square_1x.png" onclick="javascript:location.href='/oauth2/authorization/google'">
                         </div>
                         <!-- Oauth 소셜로그인end -->
                     </div>

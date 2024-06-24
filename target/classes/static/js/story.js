@@ -6,6 +6,8 @@
 	(4) 댓글쓰기
 	(5) 댓글삭제
  */
+// (0) 현재 로그인 사용자
+let principalId = $("#principalId").val();
 
 // (1) 스토리 로드하기
 let page = 0;
@@ -81,14 +83,16 @@ function getStoryItem(image) {
 			
 			image.comments.forEach((comment)=>{
 				item += `<div class="sl__item__contents__comment" id="storyCommentItem-${comment.id}">
-						<p>
-							<b>${comment.user.username} :</b> ${comment.content}.
-						</p>
-		
-						<button>
-							<i class="fas fa-times"></i>
-						</button>
-					</div>`;
+							<p>
+								<b>${comment.user.username} :</b> ${comment.content}.
+							</p>`;
+							
+							if(principalId == comment.user.id){
+								item+= `<button onclick="deleteComment(${comment.id});">
+											<i class="fas fa-times"></i>
+										</button>`;
+							}
+				item +=	`</div>`;
 			});
 	
 			item += `
@@ -183,7 +187,7 @@ function writeComment(imageId) {
 	}
 
 	if (data.content === "") {
-		alert("댓글을 작성해주세요!");
+		alert("댓글 내용을 작성해주세요!");
 		return;
 	}
 	
@@ -195,7 +199,7 @@ function writeComment(imageId) {
 		dataType:"json"
 		
 	}).done(res=>{
-		console.log("댓글작성 성공", res)
+		console.log("댓글작성 성공", res);
 		
 		let comment = res.data;
 		
@@ -205,14 +209,14 @@ function writeComment(imageId) {
 		      <b>${comment.user.username} :</b>
 		      ${comment.content}
 		    </p>
-		    <button><i class="fas fa-times"></i></button>
+		    <button onclick="deleteComment(${comment.id});"><i class="fas fa-times"></i></button>
 		  </div>
 		`;
 		commentList.prepend(content);
 		
 	}).fail(error=>{
-		alert("일시적인 오류로 댓글 작성에 실패했습니다. 네트워크 환경 확인 후 다시 시도해주세요.");
-		console.log(error)
+		alert(error.responseJSON.data.content);
+		console.log("댓글 작성 실패", error);
 	});
 
 	
@@ -220,7 +224,18 @@ function writeComment(imageId) {
 }
 
 // (5) 댓글 삭제
-function deleteComment() {
+function deleteComment(commentId) {
+
+	$.ajax({
+		type:"delete",
+		url:`/api/comment/${commentId}`,
+		dataType:"json"
+	}).done(res=>{
+		console.log(res)
+		$(`#storyCommentItem-${commentId}`).remove();
+	}).fail(error=>{
+		console.log(error)
+	});
 
 }
 

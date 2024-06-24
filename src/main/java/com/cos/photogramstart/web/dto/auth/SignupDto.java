@@ -11,13 +11,13 @@ import lombok.Data;
 public class SignupDto {
 	// RequestDto
 	
-	@Size(min=2, max=20)
+	@Size(min=2, max=20, message = "사용자명은 2자 이상 20자 이하이어야 합니다.")
 	private String username;
-	@NotBlank
+	@NotBlank(message = "암호는 필수입니다.")
 	private String password;
-	@NotBlank
+	@NotBlank(message = "이메일은 필수입니다.")
 	private String email;
-	@NotBlank
+	@NotBlank(message = "이름은 필수입니다.")
 	private String name;
 	
 	public User toEntity() {

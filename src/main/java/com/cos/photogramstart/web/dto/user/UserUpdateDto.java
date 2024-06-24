@@ -10,11 +10,11 @@ import lombok.Data;
 public class UserUpdateDto {
 	
 	/** 이름 */
-	@NotBlank
-	private String name;	// 필수
+	@NotBlank(message = "이름은 필수입니다.")
+	private String name;
 	/** 암호 */
-	@NotBlank
-	private String password;// 필수
+	@NotBlank(message = "암호는 필수입니다.")
+	private String password;
 	/** 웹사이트 */
 	private String website;
 	/** 자기소개(바이오) */

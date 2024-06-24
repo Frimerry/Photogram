@@ -5,6 +5,12 @@ server:
     encoding:
       charset: utf-8
       enabled: true
+  ssl:
+    enabled: true
+    key-store: keystore.p12
+    key-store-password: 662607
+    key-store-type: PKCS12
+    key-alias: spring
     
 spring:
   mvc:
@@ -34,7 +40,15 @@ spring:
   security:
     user:
       name: test
-      password: 1234   
-
+      password: 1234
+      
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 1076115618856-ijd5fls8t32o7n646n8h29ecbvpupqkc.apps.googleusercontent.com
+            client-secret: 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
+            scope: profile, email
+  
 file:
   path: C:\Programz\sts-workspace\springboot\upload\

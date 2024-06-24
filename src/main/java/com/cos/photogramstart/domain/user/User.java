@@ -33,7 +33,7 @@ public class User {
 	private int id;
 	
 	/** 사용자Id */
-	@Column(length=20, unique=true)
+	@Column(length=200, unique=true)
 	private String username;
 	
 	/** 비밀번호 */
@@ -76,6 +76,14 @@ public class User {
 	@PrePersist	// DB에 Insert되기직전에 실행
 	public void createDate() {
 		this.createDate = LocalDateTime.now();
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", name=" + name + ", website="
+				+ website + ", bio=" + bio + ", email=" + email + ", phone=" + phone + ", gender=" + gender
+				+ ", profileImageUrl=" + profileImageUrl + ", role=" + role  + ", createDate="
+				+ createDate + "]";
 	}
 	
 }
