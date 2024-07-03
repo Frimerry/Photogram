@@ -2,11 +2,21 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="../layout/header.jsp"%>
 
+
+<style>
+     .no-content {
+         font-size: 16px;
+         color: gray;
+         text-align: center;
+         margin: 200px;
+     }
+ </style>
+    
 <main class="main">
 	<section class="container">
 		<!--전체 리스트 시작-->
 		<article class="story-list" id="storyList">
-
+			<div class="no-content"></div>
 			<!--전체 리스트 아이템-->
 
 

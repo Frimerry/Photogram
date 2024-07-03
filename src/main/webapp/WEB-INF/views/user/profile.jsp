@@ -10,16 +10,30 @@
 
 		<!--유저이미지-->
 		<div class="profile-left">
-			<div class="profile-img-wrap story-border"
-				onclick="popup('.modal-image')">
-				<form id="userProfileImageForm">
-					<input type="file" name="profileImageFile" style="display: none;"
-						id="userProfileImageInput" />
-				</form>
-
-				<img class="profile-image" src="/upload/${dto.user.profileImageUrl}"
-					onerror="this.src='/images/person.jpeg'" id="userProfileImage" />
-			</div>
+			<c:choose>
+				<c:when test="${dto.pageOwnerState}">
+					<div class="profile-img-wrap story-border"
+						onclick="popup('.modal-image')">
+						<form id="userProfileImageForm">
+							<input type="file" name="profileImageFile" style="display: none;"
+								id="userProfileImageInput" />
+						</form>
+						<img class="profile-image" src="/upload/${dto.user.profileImageUrl}"
+							onerror="this.src='/images/person.png'" id="userProfileImage" />
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div class="profile-img-wrap story-border">
+						<form id="userProfileImageForm">
+							<input type="file" name="profileImageFile" style="display: none;"
+								id="userProfileImageInput" />
+						</form>
+						<img class="profile-image" src="/upload/${dto.user.profileImageUrl}"
+							onerror="this.src='/images/person.png'" id="userProfileImage" />
+					</div>
+				</c:otherwise>	
+			</c:choose>
+			
 		</div>
 		<!--유저이미지end-->
 
@@ -70,7 +84,7 @@
 <section id="tab-content">
 	<!--게시물컨컨테이너-->
 	<div class="profileContainer">
-		<!--그냥 감싸는 div (지우면이미지커짐)-->
+		<!--감싸는 div (지우면이미지커짐)-->
 		<div id="tab-1-content" class="tab-content-item show">
 			<!--게시물컨 그리드배열-->
 			<div class="tab-1-content-inner">

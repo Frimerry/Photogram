@@ -20,9 +20,6 @@ function storyLoad() {
 		
 	}).done(res=>{
 		
-		// TODO : 구독목록이 없는 경우의 추가적인 처리 필요
-		console.log("TODO: 수정예정", res.data.totalElements)
-		
 		if(res.data.totalElements!= 0){
 			res.data.content.forEach((image)=>{
 				let storyItem = getStoryItem(image);
@@ -30,7 +27,9 @@ function storyLoad() {
 			});
 		}
 		else {
-			alert("TEST:표시할 구독목록이 없습니다.");
+			const div = $('.no-content');
+            const span = $('<span>').text('표시할 스토리가 없습니다.');
+            div.append(span);
 		}
 		
 	}).fail(error=>{
@@ -47,7 +46,7 @@ function getStoryItem(image) {
 		<div class="sl__item__header">
 			<div>
 				<img class="profile-image" src="/upload/${image.user.profileImageUrl}"
-					onerror="this.src='/images/person.jpeg'" />
+					onerror="this.src='/images/person.png'" />
 			</div>
 			<div>${image.user.username}</div>
 		</div>
