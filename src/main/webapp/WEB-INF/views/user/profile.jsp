@@ -92,7 +92,7 @@
 				<!--아이템들-->
 				<%-- EL표현식에서 변수명을 사용하면 get함수 자동호출 --%>
 				<c:forEach var="image" items="${dto.user.images}">
-					<div class="img-box">
+					<div class="img-box" onclick="viewImageModalOpen(${image.id})">
 						<a href="/upload/${image.postImageUrl}"> <img src="/upload/${image.postImageUrl}" /></a>
 						<div class="comment">
 							<a href="#" class=""> 
@@ -146,6 +146,24 @@
 	</div>
 </div>
 <!--구독정보 모달end-->
+
+<!--이미지 게시물 정보 모달-->
+<div class="modal-viewImage">
+	<div class="viewImage">
+		<div class="viewImage-header">
+			<span></span>
+			<button class="x-button" onclick="modalClose()">
+				<i class="fas fa-times"></i>
+			</button>
+			
+			<div id="storyList" class="story-view">
+				
+			</div>
+			
+		</div>
+	</div>
+</div>
+<!--이미지 게시물 정보 모달end-->
 
 <script src="/js/profile.js"></script>
 

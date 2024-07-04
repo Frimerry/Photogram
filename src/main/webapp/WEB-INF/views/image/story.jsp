@@ -8,7 +8,7 @@
          font-size: 16px;
          color: gray;
          text-align: center;
-         margin: 200px;
+         margin: 10px;
      }
  </style>
     

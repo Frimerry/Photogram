@@ -14,5 +14,7 @@ public interface ImageRepository extends JpaRepository<Image, Integer>{
 	
 	@Query(value="SELECT i.* FROM image I INNER JOIN (SELECT imageId, likeCount FROM (SELECT imageId, COUNT(imageId) likeCount FROM likes GROUP BY imageId)T)U ON I.id = U.imageId ORDER BY likeCount DESC", nativeQuery=true)
 	List<Image> mPopular();
+	
+	Image findById(int id);
 
 }

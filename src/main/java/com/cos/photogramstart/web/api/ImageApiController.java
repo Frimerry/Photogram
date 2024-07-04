@@ -37,10 +37,16 @@ public class ImageApiController {
 		return new ResponseEntity<>(new CMRespDto<>(constant.POSITIVE, "Success", images), HttpStatus.OK);
 	}
 	
+	/* 이미지 게시물 상세보기 */
+	@GetMapping("/api/image/{imageId}")
+	public ResponseEntity<?> viewImage(@PathVariable int imageId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+		Image image = imageService.viewImage(imageId, principalDetails.getUser().getId());
+		return new ResponseEntity<>(new CMRespDto<>(constant.POSITIVE, "Success", image), HttpStatus.OK);
+	}
+	
 	/* 좋아요 */
 	@PostMapping("/api/image/{imageId}/likes")
-	public ResponseEntity<?> likes(@PathVariable int imageId,
-			@AuthenticationPrincipal PrincipalDetails principalDetails){
+	public ResponseEntity<?> likes(@PathVariable int imageId, @AuthenticationPrincipal PrincipalDetails principalDetails){
 		
 		likesService.likes(imageId, principalDetails.getUser().getId());
 		
@@ -49,8 +55,7 @@ public class ImageApiController {
 	
 	/* 좋아요 취소 */
 	@DeleteMapping("/api/image/{imageId}/unlikes")
-	public ResponseEntity<?> unlikes(@PathVariable int imageId,
-			@AuthenticationPrincipal PrincipalDetails principalDetails){
+	public ResponseEntity<?> unlikes(@PathVariable int imageId, @AuthenticationPrincipal PrincipalDetails principalDetails){
 		
 		likesService.unlikes(imageId, principalDetails.getUser().getId());
 		

@@ -6,6 +6,29 @@
 	(4) 댓글쓰기
 	(5) 댓글삭제
  */
+
+$(document).ready(function() {
+  adjustImageSize();
+
+  // 윈도우 리사이즈 시에도 이미지 사이즈 조정
+  $(window).on('resize', adjustImageSize);
+
+  // MutationObserver를 사용하여 DOM 변화를 감지
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.type === 'childList') {
+        adjustImageSize();
+      }
+    });
+  });
+
+  // .main 요소를 관찰
+  var config = { childList: true, subtree: true };
+  observer.observe(document.querySelector('.main'), config);
+});
+
+
+
 // (0) 현재 로그인 사용자
 let principalId = $("#principalId").val();
 
@@ -48,7 +71,7 @@ function getStoryItem(image) {
 				<img class="profile-image" src="/upload/${image.user.profileImageUrl}"
 					onerror="this.src='/images/person.png'" />
 			</div>
-			<div>${image.user.username}</div>
+			<div>${image.user.name}</div>
 		</div>
 	
 		<div class="sl__item__img">
@@ -83,7 +106,7 @@ function getStoryItem(image) {
 			image.comments.forEach((comment)=>{
 				item += `<div class="sl__item__contents__comment" id="storyCommentItem-${comment.id}">
 							<p>
-								<b>${comment.user.username} :</b> ${comment.content}.
+								<b>${comment.user.name} :</b> ${comment.content}.
 							</p>`;
 							
 							if(principalId == comment.user.id){
@@ -238,9 +261,40 @@ function deleteComment(commentId) {
 
 }
 
+// (6) 이미지 크기 조정
+function adjustImageSize() {
+  $('.main .container .story-list .story-list__item .sl__item__img img').each(function() {
+    var $this = $(this);
+    var img = this;
 
+    // 이미 로드된 이미지일 경우
+    if (img.complete) {
+      resizeImage($this, img);
+    } else {
+      // 이미지가 로드될 때까지 기다림
+      $this.on('load', function() {
+        resizeImage($this, img);
+      });
+    }
+  });
+}
 
+function resizeImage($this, img) {
+  var imgWidth = img.naturalWidth;
+  var imgHeight = img.naturalHeight;
 
+  console.log('가로:' + imgWidth);
+  console.log('세로:' + imgHeight);
 
-
-
+  if (imgWidth > imgHeight) {
+    $this.css({
+      width: '100%',
+      height: 'auto'
+    });
+  } else {
+    $this.css({
+      width: 'auto',
+      height: '100%'
+    });
+  }
+}

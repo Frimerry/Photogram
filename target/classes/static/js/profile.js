@@ -9,6 +9,7 @@
   (7) 구독자 정보 모달 닫기
  */
 
+
 // (1) 유저 프로필 페이지 구독하기, 구독취소
 function toggleSubscribe(toUserId, obj) {
 	if ($(obj).text() === "구독취소") {
@@ -157,6 +158,150 @@ function modalImage() {
 function modalClose() {
 	$(".modal-subscribe").css("display", "none");
 	location.reload();
+}
+
+// (9) 이미지 게시물 정보 모달 보기
+function viewImageModalOpen(imageId) {
+	$(".modal-viewImage").css("display", "flex");
+	
+	$.ajax({
+			url:`/api/image/${imageId}`,
+			dataType:"json"
+		}).done(res=>{
+			let imageDetails = viewImage(res.data);
+			$("#storyList").append(imageDetails);
+			
+			// 이미지가 로드되었을 때 사이즈 조정
+			  $('.modal-viewImage .viewImage .viewImage-header .story-view .story-list__item .sl__item__img img').on('load', adjustImageSize);
+			
+			  // 이미 로드된 이미지에 대해 사이즈 조정
+			  $('.modal-viewImage .viewImage .viewImage-header .story-view .story-list__item .sl__item__img img').each(function() {
+			    if (this.complete) {
+			      $(this).trigger('load');
+			    }
+			  });
+  
+		}).fail(error=>{
+			console.log("Image View Error!!!", error)
+		});
+}
+// (10) 이미지 게시물 상세정보
+function viewImage(image){
+	let item = `<div class="story-list__item">
+		<div class="sl__item__header">
+			<div>
+				<img class="profile-image" src="/upload/${image.user.profileImageUrl}"
+					onerror="this.src='/images/person.png'" />
+			</div>
+			<div>${image.user.name}</div>
+		</div>
+	
+		<div class="sl__item__img">
+			<img src="/upload/${image.postImageUrl}" />
+		</div>
+		
+		<div class="sl__item__contents">
+			<div class="sl__item__contents__icon">
+				<button>`;
+				
+				if(image.likeState){
+					// 좋아요 상태
+					item += `<i class="fas fa-heart active" id="storyLikeIcon-${image.id}" onclick="toggleLike(${image.id})"></i>`;
+				}
+				else{
+					// 기본 상태
+					item += `<i class="far fa-heart" id="storyLikeIcon-${image.id}" onclick="toggleLike(${image.id})"></i>`;
+				}
+			
+			item +=`
+				</button>
+			</div>
+	
+			<span class="like"><b id="storyLikeCount-${image.id}">${image.likeCount} </b>likes</span>
+	
+			<div class="sl__item__contents__content">
+				<p>${image.caption}</p>
+			</div>
+		</div>
+		
+	</div>`;
+				
+	return item;
+}
+
+// (11) 이미지 크기 조정
+function adjustImageSize() {
+  $('.modal-viewImage .viewImage .viewImage-header .story-view .story-list__item .sl__item__img img').each(function() {
+    var $this = $(this);
+    var imgWidth = this.naturalWidth;
+    var imgHeight = this.naturalHeight;
+
+    if (imgWidth > imgHeight) {
+      $this.css({
+        width: '100%',
+        height: '500px'
+      });
+    } else {
+      $this.css({
+        width: 'auto',
+        height: '100%'
+      });
+    }
+  });
+}
+
+// (3) 좋아요, 좋아요 취소
+function toggleLike(imageId) {
+	
+	let likeIcon = $(`#storyLikeIcon-${imageId}`);
+	
+	if (likeIcon.hasClass("far")) {
+		// 기본 상태, 좋아요 실행
+		$.ajax({
+			type:"post",
+			url:`/api/image/${imageId}/likes`,
+			dataType:"json"
+		}).done(res=>{
+			
+			let likeCountStr = $(`#storyLikeCount-${imageId}`).text();
+			let likeCount = Number(likeCountStr) + 1;
+			
+			$(`#storyLikeCount-${imageId}`).text(likeCount);
+			
+			likeIcon.addClass("fas");
+			likeIcon.addClass("active");
+			likeIcon.removeClass("far");
+			
+		}).fail(error=>{
+			console.log("Like Error", error);
+			alert("일시적인 오류로 좋아요 실패. 네트워크 상태를 확인해주세요.");
+		});
+		
+	} else {
+		// 좋아요 상태, 좋아요 취소 실행
+		$.ajax({
+			type:"delete",
+			url:`/api/image/${imageId}/unlikes`,
+			dataType:"json"
+			
+		}).done(res=>{
+			
+			let likeCountStr = $(`#storyLikeCount-${imageId}`).text();
+			let likeCount = Number(likeCountStr) - 1;
+			
+			$(`#storyLikeCount-${imageId}`).text(likeCount);
+			
+			likeIcon.removeClass("fas");
+			likeIcon.removeClass("active");
+			likeIcon.addClass("far");
+			
+		}).fail(error=>{
+			console.log("Unlike Error", error);
+			alert("일시적인 오류로 좋아요 취소 실패. 네트워크 상태를 확인해주세요.");
+		});
+		
+		
+	}
 }
 
 

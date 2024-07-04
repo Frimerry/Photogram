@@ -51,6 +51,23 @@ public class ImageService {
 		return images;
 	}
 	
+	/* 이미지 게시글 상세보기 */
+	@Transactional(readOnly=true)
+	public Image viewImage(int id, int principalId) {
+		Image image = imageRepository.findById(id);
+		
+		// 좋아요 갯수
+		image.setLikeCount(image.getLikes().size());
+		
+		// 좋아요 상태
+		image.getLikes().forEach((like)->{
+			if(like.getUser().getId() == principalId) {
+				image.setLikeState(true);
+			}
+		});
+		return image;
+	}
+	
 	/* 사진 업로드 경로 */
 	@Value("${file.path}")	// application.yml
 	private String uploadFolder;
