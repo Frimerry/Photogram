@@ -1,64 +1,26 @@
 # 포토그램
 
-### 의존성
+### 테스트 계정
+1. id : test1 / pw : 1234
+2. id : test2 / pw : 1234
+3. id : test3 / pw : 1234
+4. id : test4 / pw : 1234
 
-- Sring Boot DevTools
+- Sring Boot
 - Lombok
 - Spring Data JPA
-- MariaDB Driver
+- MariaDB
 - Spring Security
 - Spring Web
 - oauth2-client
+- AWS EC2
+- AWS Elastic Beanstalk
 
-### 데이터베이스
+### 기능
 
-```sql
-create user 'username'@'%' identified by 'password';
-GRANT ALL PRIVILEGES ON *.* TO 'username'@'%';
-create database photogram;
-```
-
-### yml 설정
-
-```yml
-server:
-  port: 8081
-  servlet:
-    context-path: /
-    encoding:
-      charset: utf-8
-      enabled: true
-    
-spring:
-  mvc:
-    view:
-      prefix: /WEB-INF/views/
-      suffix: .jsp
-      
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/photogram?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
-    username: username
-    password: password
-    
-  jpa:
-    open-in-view: true
-    hibernate:
-      ddl-auto: update
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    show-sql: true
-      
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 2MB
-
-  security:
-    user:
-      name: test
-      password: 1234   
-
-#file:
-#  path: C:/src/springbootwork-sts/upload/
-```
+회원가입
+로그인, 회원정보 수정
+사진 파일 업로드
+댓글 작성, 댓글 삭제
+좋아요, 좋아요 취소
+구독, 구독 취소
